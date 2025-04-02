@@ -1,5 +1,7 @@
 import Announcements from "@/components/Announcements";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
+import EventCalendar from "@/components/EventCalendar";
+import EventCalendarContainer from "@/components/EventCalendarContainer";
 import { auth } from "@clerk/nextjs/server";
 
 const TeacherPage = () => {
@@ -15,7 +17,8 @@ const TeacherPage = () => {
       </div>
       {/* Right Sidebar */}
       <div className="w-full xl:w-1/3 flex flex-col gap-8">
-        <Announcements />
+        <Announcements /> 
+        <EventCalendar/>
       </div>
     </div>
   );

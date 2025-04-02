@@ -10,8 +10,8 @@ import "./globals.css";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EduSphere",
-  description: "EduSphere | Empowering Education, Simplifying Management.",
+  title: "BHS",
+  description: "BHS | Empowering Education, Simplifying Management.",
 };
 
 export default function RootLayout({

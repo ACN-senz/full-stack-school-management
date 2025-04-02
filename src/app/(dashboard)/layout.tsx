@@ -17,8 +17,8 @@ export default function DashboardLayout({
           href="/"
           className="flex items-center justify-center lg:justify-start gap-2"
         >
-          <Image src="/logo.png" alt="logo" width={32} height={32} />
-          <span className="hidden lg:block font-bold">EduSphere</span>
+          <Image src="/logo1.jpg" alt="logo" width={32} height={32} />
+          <span className="hidden lg:block font-bold">BHS</span>
         </Link>
         <Menu />
       </div>

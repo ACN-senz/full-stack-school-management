@@ -123,6 +123,7 @@ const TeacherListPage = async ({
                 classId: parseInt(value),
               },
             };
+            // this function bellow helps when u search for anythig in the system and u can statrt with any letter of what u are searching n it is case sensitive
             break;
           case "search":
             query.name = { contains: value, mode: "insensitive" };

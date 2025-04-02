@@ -1,3 +1,5 @@
+ import { auth } from "@clerk/nextjs/server";
+
 const getLatestMonday = (): Date => {
   const today = new Date();
   const dayOfWeek = today.getDay();

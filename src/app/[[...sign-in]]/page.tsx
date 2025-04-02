@@ -52,13 +52,13 @@ const LoginPage = () => {
           <div className="flex flex-col items-center justify-center mb-4 w-full">
             <div className="flex items-center justify-center space-x-3 mb-1">
               <Image 
-                src="/logo.png" 
+                src="/logo1.jpg" 
                 alt="EduSphere Logo" 
-                width={48} 
-                height={48} 
+                width={60} 
+                height={60} 
               />
               <div className="flex flex-col items-center">
-                <h1 className="text-xl font-bold text-gray-800">EduSphere</h1>
+                <h1 className="text-xl font-bold text-gray-800">BHS</h1>
                 <span className="text-xs text-gray-500">Empowering Education</span>
               </div>
             </div>
