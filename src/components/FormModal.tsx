@@ -3,6 +3,7 @@
 import {
   deleteClass,
   deleteExam,
+  deleteEvent,
   deleteStudent,
   deleteSubject,
   deleteTeacher,
@@ -21,19 +22,20 @@ const deleteActionMap = {
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
+// TODO: OTHER DELETE ACTIONS
   parent: deleteSubject,
   lesson: deleteSubject,
   assignment: deleteSubject,
   result: deleteSubject,
   attendance: deleteSubject,
-  event: deleteSubject,
+  event: deleteEvent,
   announcement: deleteSubject,
 };
 
-// Implementation of Lazy Loading
+// USE LAZY LOADING
 
-// Import TeacherForm from "./forms/TeacherForm";
-// Import StudentForm from "./forms/StudentForm";
+// import TeacherForm from "./forms/TeacherForm";
+// import StudentForm from "./forms/StudentForm";
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
   loading: () => <h1>Loading...</h1>,
@@ -50,134 +52,21 @@ const ClassForm = dynamic(() => import("./forms/ClassForm"), {
 const ExamForm = dynamic(() => import("./forms/ExamForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-// Slug
-const EventForm = ({ 
-  type, 
-  data, 
-  setOpen, 
-  relatedData 
-}: { 
-  type: "create" | "update", 
-  data?: any, 
-  setOpen: Dispatch<SetStateAction<boolean>>, 
-  relatedData?: any 
-}) => {
-  return (
-    <form className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Event Name
-        </label>
-        <input 
-          type="text" 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-          placeholder="Enter event name"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Event Date
-        </label>
-        <input 
-          type="date" 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-        />
-      </div>
-      <div className="flex justify-end space-x-2">
-        <button 
-          type="button" 
-          onClick={() => setOpen(false)} 
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md"
-        >
-          Cancel
-        </button>
-        <button 
-          type="submit" 
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          {type === 'create' ? 'Create Event' : 'Update Event'}
-        </button>
-      </div>
-    </form>
-  );
-};
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 
-// Slug
-const AnnouncementForm = ({ 
-  type, 
-  data, 
-  setOpen, 
-  relatedData 
-}: { 
-  type: "create" | "update", 
-  data?: any, 
-  setOpen: Dispatch<SetStateAction<boolean>>, 
-  relatedData?: any 
-}) => {
-  return (
-    <form className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Announcement Title
-        </label>
-        <input 
-          type="text" 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-          placeholder="Enter announcement title"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Announcement Content
-        </label>
-        <textarea 
-          rows={4}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-          placeholder="Enter announcement details"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Target Audience
-        </label>
-        <select 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-        >
-          <option>All</option>
-          <option>Students</option>
-          <option>Teachers</option>
-          <option>Parents</option>
-        </select>
-      </div>
-      <div className="flex justify-end space-x-2">
-        <button 
-          type="button" 
-          onClick={() => setOpen(false)} 
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md"
-        >
-          Cancel
-        </button>
-        <button 
-          type="submit" 
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          {type === 'create' ? 'Create Announcement' : 'Update Announcement'}
-        </button>
-      </div>
-    </form>
-  );
-};
+// TODO: OTHER FORMS
 
 const forms: {
   [key: string]: (
     setOpen: Dispatch<SetStateAction<boolean>>,
     type: "create" | "update",
     data?: any,
-    relatedData?: any,
-    table?: string
+    relatedData?: any
   ) => JSX.Element;
 } = {
-  subject: (setOpen, type, data, relatedData, table) => (
+  subject: (setOpen, type, data, relatedData) => (
     <SubjectForm
       type={type}
       data={data}
@@ -185,7 +74,15 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  class: (setOpen, type, data, relatedData, table) => (
+  event: (setOpen, type, data, relatedData) => (
+    <EventForm
+      setOpen={setOpen}
+      type={type}
+      data={data}
+      relatedData={relatedData}
+    />
+  ),  
+  class: (setOpen, type, data, relatedData) => (
     <ClassForm
       type={type}
       data={data}
@@ -193,7 +90,7 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  teacher: (setOpen, type, data, relatedData, table) => (
+  teacher: (setOpen, type, data, relatedData) => (
     <TeacherForm
       type={type}
       data={data}
@@ -201,7 +98,7 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  student: (setOpen, type, data, relatedData, table) => (
+  student: (setOpen, type, data, relatedData) => (
     <StudentForm
       type={type}
       data={data}
@@ -209,36 +106,15 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-  exam: (setOpen, type, data, relatedData, table) => (
+  exam: (setOpen, type, data, relatedData) => (
     <ExamForm
       type={type}
       data={data}
       setOpen={setOpen}
       relatedData={relatedData}
     />
+    // TODO OTHER LIST ITEMS
   ),
-  event: (setOpen, type, data, relatedData, table) => (
-    <EventForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  announcement: (setOpen, type, data, relatedData, table) => (
-    <AnnouncementForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
-  // Default form for undefined tables
-  default: (setOpen, type, data, relatedData, table) => (
-    <div className="text-center text-red-500">
-      Form not implemented for this table type: {table}
-    </div>
-  )
 };
 
 const FormModal = ({
@@ -251,10 +127,10 @@ const FormModal = ({
   const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
   const bgColor =
     type === "create"
-      ? "bg-plYellow"
+      ? "bg-lamaYellow"
       : type === "update"
-      ? "bg-plSky"
-      : "bg-plPurple";
+      ? "bg-lamaSky"
+      : "bg-lamaPurple";
 
   const [open, setOpen] = useState(false);
 
@@ -274,6 +150,13 @@ const FormModal = ({
       }
     }, [state, router]);
 
+    const FormComponent = forms[table];
+
+    if (!FormComponent && (type === "create" || type === "update")) {
+      console.error(`No form found for table "${table}"`);
+    }
+
+
     return type === "delete" && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
         <input type="text | number" name="id" value={id} hidden />
@@ -285,7 +168,9 @@ const FormModal = ({
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      (forms[table] || forms.default)(setOpen, type, data, relatedData, table)
+      FormComponent
+        ? FormComponent(setOpen, type, data, relatedData)
+        : <p className="text-red-500 text-center">Form for {table} not found!</p>
     ) : (
       "Form not found!"
     );

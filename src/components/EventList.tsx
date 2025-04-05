@@ -1,4 +1,17 @@
 import prisma from "@/lib/prisma";
+type Event = {
+  id: number;
+  title: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  classId: number | null;
+  class: {
+    id: number;
+    name: string;
+  } | null;
+};
+
 
 const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
   const date = dateParam ? new Date(dateParam) : new Date();
@@ -10,9 +23,17 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
         lte: new Date(date.setHours(23, 59, 59, 999)),
       },
     },
+    include: {
+      class: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
 
-  return data.map((event) => (
+  return data.map((event: Event) => (
     <div
       className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-plSky even:border-t-plPurple"
       key={event.id}
@@ -28,6 +49,11 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
         </span>
       </div>
       <p className="mt-2 text-gray-400 text-sm">{event.description}</p>
+      {event.class && (
+        <div className="mt-2 text-xs text-gray-500">
+          Class: {event.class.name}
+        </div>
+      )}
     </div>
   ));
 };

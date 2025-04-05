@@ -1,19 +1,16 @@
 "use client";
 
-import Image from "next/image";
-import { CldUploadWidget } from "next-cloudinary";
-import { useRouter } from "next/navigation";
-
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useFormState } from "react-dom";
-
-import InputField from "../InputField";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import InputField from "../InputField";
+import Image from "next/image";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
+import { useFormState } from "react-dom";
 import { createTeacher, updateTeacher } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { CldUploadWidget } from "next-cloudinary";
 
 const TeacherForm = ({
   type,

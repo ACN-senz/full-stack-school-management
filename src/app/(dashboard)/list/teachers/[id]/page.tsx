@@ -92,9 +92,8 @@ const SingleTeacherPage = async ({
             </div>
           </div>
           {/* SMALL CARDS */}
-          <div className="flex-1 flex gap-4 justify-between flex-wrap">
-            {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+          <div className="flex-1 grid md:grid-cols-2 grid-cols-1 gap-4 ">            {/* CARD */}
+            <div className="bg-white p-4 rounded-md flex gap-4 w-full">
               <Image
                 src="/singleAttendance.png"
                 alt=""
@@ -108,7 +107,7 @@ const SingleTeacherPage = async ({
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="bg-white p-4 rounded-md flex gap-4 w-full">
               <Image
                 src="/singleBranch.png"
                 alt=""
@@ -124,7 +123,7 @@ const SingleTeacherPage = async ({
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="bg-white p-4 rounded-md flex gap-4 w-full">
               <Image
                 src="/singleLesson.png"
                 alt=""
@@ -140,7 +139,7 @@ const SingleTeacherPage = async ({
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="bg-white p-4 rounded-md flex gap-4 w-full">
               <Image
                 src="/singleClass.png"
                 alt=""

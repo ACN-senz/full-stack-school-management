@@ -3,7 +3,7 @@ import { z } from "zod";
 export const subjectSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: "Subject name is required!" }),
-  teachers: z.array(z.string()), 
+  teachers: z.array(z.string()), //teacher ids
 });
 
 export type SubjectSchema = z.infer<typeof subjectSchema>;
@@ -42,7 +42,7 @@ export const teacherSchema = z.object({
   bloodType: z.string().min(1, { message: "Blood Type is required!" }),
   birthday: z.coerce.date({ message: "Birthday is required!" }),
   sex: z.enum(["MALE", "FEMALE"], { message: "Sex is required!" }),
-  subjects: z.array(z.string()).optional(), 
+  subjects: z.array(z.string()).optional(), // subject ids
 });
 
 export type TeacherSchema = z.infer<typeof teacherSchema>;
@@ -87,3 +87,14 @@ export const examSchema = z.object({
 });
 
 export type ExamSchema = z.infer<typeof examSchema>;
+
+export const eventSchema = z.object({
+  id: z.coerce.number().optional(),
+  title: z.string().min(1, { message: "Event title is required!" }),
+  description: z.string().min(1, { message: "Event description is required!" }),
+  startTime: z.coerce.date({ message: "Start time is required!" }),
+  endTime: z.coerce.date({ message: "End time is required!" }),
+  classId: z.coerce.number().optional(),
+});
+
+export type EventSchema = z.infer<typeof eventSchema>;

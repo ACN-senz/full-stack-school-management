@@ -10,13 +10,19 @@ const BigCalendarContainer = async ({
   type: "teacherId" | "classId";
   id: string | number;
 }) => {
+  // Log the ID being passed
+  console.log("BigCalendarContainer id:", id);
+
   const dataRes = await prisma.lesson.findMany({
     where: {
       ...(type === "teacherId"
         ? { teacherId: id as string }
-        : { classId: Number(id) || undefined }),
+        : { classId: id as number }),
     },
   });
+
+  // Log the fetched lessons
+  console.log("Fetched lessons:", dataRes);
 
   const data = dataRes.map((lesson) => ({
     title: lesson.name,
@@ -24,10 +30,16 @@ const BigCalendarContainer = async ({
     end: lesson.endTime,
   }));
 
+  // Log data before adjustment
+  console.log("Data before adjustment:", data);
+
   const schedule = adjustScheduleToCurrentWeek(data);
 
+  // Log data after adjustment
+  console.log("Data after adjustment:", schedule);
+
   return (
-    <div className="">
+    <div className="h-full w-full">
       <BigCalendar data={schedule} />
     </div>
   );

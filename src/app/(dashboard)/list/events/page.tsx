@@ -8,10 +8,24 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 
-import { Class, Event, Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 
-type EventList = Event & { class: Class };
+// Define the Event type with class information
+type Event = {
+  id: number;
+  title: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  classId: number | null;
+  class: {
+    id: number;
+    name: string;
+    capacity: number;
+    gradeId: number;
+    supervisorId: string | null;
+  } | null;
+};
 
 const EventListPage = async ({
   searchParams,
@@ -27,6 +41,11 @@ const EventListPage = async ({
     {
       header: "Title",
       accessor: "title",
+    },
+    {
+      header: "Description",
+      accessor: "description",
+      className: "hidden md:table-cell",
     },
     {
       header: "Class",
@@ -57,12 +76,13 @@ const EventListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: EventList) => (
+  const renderRow = (item: Event) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-plPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">{item.title}</td>
+      <td className="hidden md:table-cell">{item.description}</td>
       <td>{item.class?.name || "-"}</td>
       <td className="hidden md:table-cell">
         {new Intl.DateTimeFormat("en-US").format(item.startTime)}
@@ -99,8 +119,7 @@ const EventListPage = async ({
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
-  const query: Prisma.EventWhereInput = {};
+  const query: any = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -117,7 +136,6 @@ const EventListPage = async ({
   }
 
   // ROLE CONDITIONS
-
   const roleConditions = {
     teacher: { lessons: { some: { teacherId: currentUserId! } } },
     student: { students: { some: { id: currentUserId! } } },

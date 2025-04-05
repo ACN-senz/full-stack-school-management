@@ -1,17 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { clerkClient } from "@clerk/nextjs/server";
-
 import {
   ClassSchema,
   ExamSchema,
   StudentSchema,
   SubjectSchema,
   TeacherSchema,
+  EventSchema,
 } from "./formValidationSchemas";
-
 import prisma from "./prisma";
+import { clerkClient } from "@clerk/nextjs/server";
 
 type CurrentState = { success: boolean; error: boolean };
 
@@ -24,10 +23,11 @@ export const createSubject = async (
       data: {
         name: data.name,
         teachers: {
-          connect: data.teachers.map((teacherId) => ({ id: teacherId })),
+          connect: data.teachers.map((teacherId: string) => ({ id: teacherId })),
         },
       },
     });
+    
 
     // revalidatePath("/list/subjects");
     return { success: true, error: false };
@@ -49,7 +49,7 @@ export const updateSubject = async (
       data: {
         name: data.name,
         teachers: {
-          set: data.teachers.map((teacherId) => ({ id: teacherId })),
+          set: data.teachers.map((teacherId: string) => ({ id: teacherId })),
         },
       },
     });
@@ -144,7 +144,7 @@ export const createTeacher = async (
   data: TeacherSchema
 ) => {
   try {
-    const user = await clerkClient.users.createUser({
+    const user = await clerkClient().users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
@@ -189,7 +189,7 @@ export const updateTeacher = async (
     return { success: false, error: true };
   }
   try {
-    const user = await clerkClient.users.updateUser(data.id, {
+    const user = await clerkClient().users.updateUser(data.id, {
       username: data.username,
       ...(data.password !== "" && { password: data.password }),
       firstName: data.name,
@@ -264,7 +264,7 @@ export const createStudent = async (
       return { success: false, error: true };
     }
 
-    const user = await clerkClient.users.createUser({
+    const user = await clerkClient().users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
@@ -307,7 +307,7 @@ export const updateStudent = async (
     return { success: false, error: true };
   }
   try {
-    const user = await clerkClient.users.updateUser(data.id, {
+    const user = await clerkClient().users.updateUser(data.id, {
       username: data.username,
       ...(data.password !== "" && { password: data.password }),
       firstName: data.name,
@@ -349,7 +349,7 @@ export const deleteStudent = async (
 ) => {
   const id = data.get("id") as string;
   try {
-    await clerkClient.users.deleteUser(id);
+    await clerkClient().users.deleteUser(id);
 
     await prisma.student.delete({
       where: {
@@ -462,6 +462,75 @@ export const deleteExam = async (
     });
 
     // revalidatePath("/list/subjects");
+    return { success: true, error: false };
+  } catch (err) {
+    console.error("Clerk API Error:", err);
+    console.log(err);
+    return { success: false, error: true };
+  }
+};
+export const createEvent = async (
+  currentState: CurrentState,
+  data: EventSchema
+) => {
+  try {
+    await prisma.event.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        classId: data.classId,
+      },
+    });
+
+    revalidatePath("/list/events");
+    return { success: true, error: false };
+  } catch (err) {
+    console.log(err);
+    return { success: false, error: true };
+  }
+};
+
+export const updateEvent = async (
+  currentState: CurrentState,
+  data: EventSchema
+) => {
+  try {
+    await prisma.event.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        title: data.title,
+        description: data.description,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        classId: data.classId,
+      },
+    });
+
+    revalidatePath("/list/events");
+    return { success: true, error: false };
+  } catch (err) {
+    console.log(err);
+    return { success: false, error: true };
+  }
+};
+
+export const deleteEvent = async (
+  currentState: CurrentState,
+  data: FormData
+) => {
+  const id = data.get("id") as string;
+  try {
+    await prisma.event.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    revalidatePath("/list/events");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
